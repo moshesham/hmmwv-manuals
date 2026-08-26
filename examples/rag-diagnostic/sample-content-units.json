@@ -1,0 +1,264 @@
+[
+  {
+    "schema_version": "1.0.0",
+    "content_id": "TM-9-2320-280-20-2_3-2",
+    "manual_id": "TM-9-2320-280-20-2",
+    "manual_role": "maintenance",
+    "unit_type": "procedure_task",
+    "title": "3-2. Engine Oil Dipstick Tube Replacement",
+    "chapter": "3",
+    "section": "Section I Lubrication System Maintenance",
+    "subsection": null,
+    "text_markdown": "### 3-2. Engine Oil Dipstick Tube Replacement\nThis task covers:\nINITIAL SETUP:\n#### Tools\nGeneral mechanic's tool kit: automotive (Appendix B, Item 1)\nSpecial Tools Hex-head driver, 8 mm (Appendix B, Item 156)",
+    "text_plain": "Engine oil dipstick tube replacement task with initial setup, removal, installation, manual references, equipment condition, and follow-on tasks.",
+    "source": {
+      "path": "TM-9-2320-280-20-2/chapter3.md",
+      "anchor": "3-2",
+      "heading": "3-2. Engine Oil Dipstick Tube Replacement",
+      "line_start": 103,
+      "line_end": 149
+    },
+    "safety_blocks": [],
+    "initial_setup": {
+      "applicable_models": [],
+      "tools": [
+        "General mechanic's tool kit: automotive (Appendix B, Item 1)"
+      ],
+      "special_tools": [
+        "Hex-head driver, 8 mm (Appendix B, Item 156)"
+      ],
+      "materials_parts": [
+        "O-ring (Appendix G, Item 209)",
+        "Plain-assembled nut (Appendix G, Item 201)",
+        "Sealant (Appendix C, Item 38)"
+      ],
+      "personnel_required": [],
+      "manual_references": [
+        "TM 9-2320-280-1",
+        "TM 9-2320-280-10",
+        "TM 9-2320-280-24P"
+      ],
+      "equipment_condition": [
+        "Hood raised and secured (TM 9-2320-280-10)."
+      ],
+      "general_safety_instructions": []
+    },
+    "procedure_steps": [
+      {
+        "sequence": "a.1",
+        "phase": "Removal",
+        "text": "Remove oil dipstick (5) from oil dipstick tube (4)."
+      },
+      {
+        "sequence": "a.5",
+        "phase": "Removal",
+        "text": "Remove oil dipstick tube (4) from engine oil pan (10). Remove and discard O-ring (9)."
+      },
+      {
+        "sequence": "b.6",
+        "phase": "Installation",
+        "text": "Install oil dipstick (5) into oil dipstick tube (4)."
+      }
+    ],
+    "follow_on_tasks": [
+      {
+        "text": "Start engine (TM 9-2320-280-10) and check for oil leaks.",
+        "reference": "TM 9-2320-280-10"
+      },
+      {
+        "text": "Lower and secure hood (TM 9-2320-280-10).",
+        "reference": "TM 9-2320-280-10"
+      }
+    ],
+    "troubleshooting": null,
+    "relations": [
+      {
+        "type": "manual_reference",
+        "label": "TM 9-2320-280-10",
+        "target": "TM-9-2320-280-10"
+      },
+      {
+        "type": "image_reference",
+        "label": "22_image_0",
+        "target": "TM-9-2320-280-20-2/images/22_image_0.png"
+      }
+    ],
+    "image_refs": [
+      {
+        "path": "TM-9-2320-280-20-2/images/22_image_0.png",
+        "caption": null
+      }
+    ],
+    "taxonomy": {
+      "subsystems": [
+        "engine",
+        "lubrication"
+      ],
+      "symptoms": [],
+      "components": [
+        "engine oil dipstick tube"
+      ],
+      "maintenance_categories": [
+        "replacement",
+        "removal",
+        "installation"
+      ],
+      "tools": [
+        "General mechanic's tool kit",
+        "Hex-head driver, 8 mm"
+      ],
+      "materials": [
+        "O-ring",
+        "Plain-assembled nut",
+        "Sealant"
+      ]
+    },
+    "provenance": {
+      "excerpt": "### 3-2. Engine Oil Dipstick Tube Replacement ... FOLLOW-ON TASKS: - Start engine (TM 9-2320-280-10) and check for oil leaks. - Lower and secure hood (TM 9-2320-280-10).",
+      "chunk_id": "TM-9-2320-280-20-2_ch3_3-2",
+      "metadata_source": "TM-9-2320-280-20-2/TM-9-2320-280-20-2_meta.json",
+      "parser_confidence": "high"
+    }
+  },
+  {
+    "schema_version": "1.0.0",
+    "content_id": "TM-9-2320-280-10_3-2_engine-fails-to-crank",
+    "manual_id": "TM-9-2320-280-10",
+    "manual_role": "operator",
+    "unit_type": "troubleshooting_entry",
+    "title": "Engine Fails To Crank",
+    "chapter": "3",
+    "section": "Section Ii. Troubleshooting",
+    "subsection": "3-2 Table 3-1. Troubleshooting",
+    "text_markdown": "#### 1. Engine Fails To Crank\nStep 1. Check to see if transmission shift lever is in \"N\" (neutral) or \"P\" (park) for M1123 and A2 vehicles.",
+    "text_plain": "Operator troubleshooting entry for engine fails to crank with ordered checks and maintenance escalation.",
+    "source": {
+      "path": "tm-9-2320-280-10/tm-9-2320-280-10.md",
+      "anchor": null,
+      "heading": "1. Engine Fails To Crank",
+      "line_start": 6206,
+      "line_end": 6221
+    },
+    "safety_blocks": [],
+    "initial_setup": null,
+    "procedure_steps": [],
+    "follow_on_tasks": [],
+    "troubleshooting": {
+      "symptom": "engine_fails_to_crank",
+      "question": "What should the operator check when the engine fails to crank?",
+      "decision_order": [
+        "Check transmission shift lever position.",
+        "Check battery fluid level and battery connections.",
+        "Attempt to slave-start vehicle.",
+        "Escalate other causes to unit maintenance."
+      ],
+      "actions": [
+        "Place lever in neutral or park if not already set.",
+        "Notify unit maintenance if battery issues exist.",
+        "Attempt to slave-start vehicle (para. 2-23)."
+      ],
+      "escalation": "Notify unit maintenance."
+    },
+    "relations": [
+      {
+        "type": "task_reference",
+        "label": "para. 2-23",
+        "target": "TM-9-2320-280-10:2-23"
+      }
+    ],
+    "image_refs": [],
+    "taxonomy": {
+      "subsystems": [
+        "engine",
+        "starting",
+        "electrical"
+      ],
+      "symptoms": [
+        "engine_fails_to_crank"
+      ],
+      "components": [
+        "transmission shift lever",
+        "battery",
+        "battery connections"
+      ],
+      "maintenance_categories": [
+        "troubleshooting",
+        "inspection",
+        "testing"
+      ],
+      "tools": [],
+      "materials": []
+    },
+    "provenance": {
+      "excerpt": "#### 1. Engine Fails To Crank ... Step 3. Attempt to slave-start vehicle (para. 2-23). Step 4. Other causes. Notify unit maintenance.",
+      "chunk_id": "TM-9-2320-280-10_ch3_engine-fails-to-crank",
+      "metadata_source": "tm-9-2320-280-10/tm-9-2320-280-10_meta.json",
+      "parser_confidence": "high"
+    }
+  },
+  {
+    "schema_version": "1.0.0",
+    "content_id": "TM-9-2320-280-20-1_2-14_page-layout",
+    "manual_id": "TM-9-2320-280-20-1",
+    "manual_role": "maintenance",
+    "unit_type": "diagnostic_flow",
+    "title": "2-14. How To Use This Troubleshooting Guide - Page Layout",
+    "chapter": "2",
+    "section": "Section IV. Electrical/Mechanical Systems Troubleshooting",
+    "subsection": null,
+    "text_markdown": "### 2-14. How To Use This Troubleshooting Guide (Cont'D)\nPAGE LAYOUT All diagnostic logic and flowcharts are on the left hand page, with supporting information, help, test, instructions and vehicle operation on the right.",
+    "text_plain": "Maintenance diagnostic flow guidance describing left-page logic, right-page support information, and yes/no diagnostic progression.",
+    "source": {
+      "path": "TM-9-2320-280-20-1/chapter2.md",
+      "anchor": "2-",
+      "heading": "2-14. How To Use This Troubleshooting Guide (Cont'D)",
+      "line_start": 1043,
+      "line_end": 1080
+    },
+    "safety_blocks": [],
+    "initial_setup": null,
+    "procedure_steps": [],
+    "follow_on_tasks": [],
+    "troubleshooting": {
+      "symptom": null,
+      "question": "How should the maintenance diagnostic flow be followed?",
+      "decision_order": [
+        "Select either a top level or a system level test.",
+        "Answer the questions on the left hand page.",
+        "Follow the YES or NO path to the next step.",
+        "Use the right hand page for support information when uncertain."
+      ],
+      "actions": [],
+      "escalation": null
+    },
+    "relations": [],
+    "image_refs": [
+      {
+        "path": "TM-9-2320-280-20-1/images/124_image_0.png",
+        "caption": null
+      }
+    ],
+    "taxonomy": {
+      "subsystems": [
+        "electrical",
+        "engine"
+      ],
+      "symptoms": [],
+      "components": [
+        "diagnostic flowchart"
+      ],
+      "maintenance_categories": [
+        "troubleshooting",
+        "testing"
+      ],
+      "tools": [],
+      "materials": []
+    },
+    "provenance": {
+      "excerpt": "PAGE LAYOUT All diagnostic logic and flowcharts are on the left hand page ... Just answer the questions on the left hand page. Follow the YES or NO path to the next step.",
+      "chunk_id": "TM-9-2320-280-20-1_ch2_2-14-page-layout",
+      "metadata_source": "TM-9-2320-280-20-1/TM-9-2320-280-20-1_meta.json",
+      "parser_confidence": "medium"
+    }
+  }
+]

@@ -1,0 +1,79 @@
+{
+  "schema_version": "1.0.0",
+  "manual_roles": [
+    "operator",
+    "maintenance",
+    "parts",
+    "engine",
+    "other"
+  ],
+  "subsystems": [
+    "engine",
+    "lubrication",
+    "fuel",
+    "electrical",
+    "charging",
+    "starting",
+    "cooling",
+    "transmission",
+    "transfer_case",
+    "brakes",
+    "steering",
+    "suspension",
+    "wheels_and_tires",
+    "body",
+    "heating_and_ventilation"
+  ],
+  "symptoms": [
+    "engine_fails_to_crank",
+    "engine_cranks_slowly",
+    "engine_cranks_but_does_not_start",
+    "vehicle_not_charging",
+    "excessive_exhaust_smoke",
+    "fluid_leak",
+    "oil_leak",
+    "overheating",
+    "abnormal_noise",
+    "loss_of_power"
+  ],
+  "maintenance_categories": [
+    "inspection",
+    "testing",
+    "troubleshooting",
+    "removal",
+    "installation",
+    "replacement",
+    "adjustment",
+    "cleaning",
+    "servicing",
+    "repair"
+  ],
+  "safety_types": [
+    "warning",
+    "caution",
+    "note"
+  ],
+  "component_seeds": {
+    "engine": [
+      "engine oil dipstick tube",
+      "engine oil filler tube",
+      "oil cooler assembly",
+      "air cleaner"
+    ],
+    "electrical": [
+      "battery",
+      "battery cables",
+      "diagnostic connector assembly",
+      "voltmeter"
+    ],
+    "charging": [
+      "alternator",
+      "alternator belts"
+    ],
+    "wheels_and_tires": [
+      "wheel studs",
+      "locknuts",
+      "tire assembly"
+    ]
+  }
+}

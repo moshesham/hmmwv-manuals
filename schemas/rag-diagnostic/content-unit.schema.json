@@ -1,0 +1,463 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://moshesham.github.io/hmmwv-manuals/schemas/rag-diagnostic/content-unit.schema.json",
+  "title": "RAG Diagnostic Content Unit",
+  "description": "Canonical content unit for interactive HMMWV diagnostic retrieval and grounding.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "content_id",
+    "manual_id",
+    "manual_role",
+    "source",
+    "unit_type",
+    "title",
+    "text_markdown",
+    "text_plain",
+    "provenance",
+    "taxonomy"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "1.0.0"
+    },
+    "content_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9._:-]+$"
+    },
+    "manual_id": {
+      "type": "string"
+    },
+    "manual_role": {
+      "type": "string",
+      "enum": [
+        "operator",
+        "maintenance",
+        "parts",
+        "engine",
+        "other"
+      ]
+    },
+    "unit_type": {
+      "type": "string",
+      "enum": [
+        "procedure_task",
+        "procedure_step_group",
+        "troubleshooting_entry",
+        "diagnostic_flow",
+        "reference_section",
+        "safety_summary"
+      ]
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "chapter": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "section": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "subsection": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "text_markdown": {
+      "type": "string"
+    },
+    "text_plain": {
+      "type": "string"
+    },
+    "source": {
+      "$ref": "#/$defs/source"
+    },
+    "safety_blocks": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/safetyBlock"
+      },
+      "default": []
+    },
+    "initial_setup": {
+      "$ref": "#/$defs/initialSetup"
+    },
+    "procedure_steps": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/procedureStep"
+      },
+      "default": []
+    },
+    "follow_on_tasks": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/followOnTask"
+      },
+      "default": []
+    },
+    "troubleshooting": {
+      "$ref": "#/$defs/troubleshooting"
+    },
+    "relations": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/relation"
+      },
+      "default": []
+    },
+    "image_refs": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/imageRef"
+      },
+      "default": []
+    },
+    "taxonomy": {
+      "$ref": "#/$defs/taxonomy"
+    },
+    "provenance": {
+      "$ref": "#/$defs/provenance"
+    }
+  },
+  "$defs": {
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "anchor",
+        "heading",
+        "line_start",
+        "line_end"
+      ],
+      "properties": {
+        "path": {
+          "type": "string"
+        },
+        "anchor": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "heading": {
+          "type": "string"
+        },
+        "line_start": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "line_end": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "safetyBlock": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "text"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "warning",
+            "caution",
+            "note"
+          ]
+        },
+        "text": {
+          "type": "string"
+        },
+        "applies_to": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "initialSetup": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "applicable_models": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": []
+        },
+        "tools": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": []
+        },
+        "special_tools": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": []
+        },
+        "materials_parts": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": []
+        },
+        "personnel_required": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": []
+        },
+        "manual_references": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": []
+        },
+        "equipment_condition": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": []
+        },
+        "general_safety_instructions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": []
+        }
+      }
+    },
+    "procedureStep": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sequence",
+        "text"
+      ],
+      "properties": {
+        "sequence": {
+          "type": "string"
+        },
+        "phase": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "text": {
+          "type": "string"
+        }
+      }
+    },
+    "followOnTask": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "text"
+      ],
+      "properties": {
+        "text": {
+          "type": "string"
+        },
+        "reference": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "troubleshooting": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "symptom": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "question": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "decision_order": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": []
+        },
+        "actions": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": []
+        },
+        "escalation": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "relation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "label"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "manual_reference",
+            "follow_on_reference",
+            "cross_manual_reference",
+            "image_reference",
+            "task_reference"
+          ]
+        },
+        "label": {
+          "type": "string"
+        },
+        "target": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "imageRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path"
+      ],
+      "properties": {
+        "path": {
+          "type": "string"
+        },
+        "caption": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "taxonomy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "subsystems",
+        "symptoms",
+        "components",
+        "maintenance_categories"
+      ],
+      "properties": {
+        "subsystems": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "symptoms": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "components": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "maintenance_categories": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "tools": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": []
+        },
+        "materials": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": []
+        }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "excerpt",
+        "chunk_id",
+        "parser_confidence"
+      ],
+      "properties": {
+        "excerpt": {
+          "type": "string"
+        },
+        "chunk_id": {
+          "type": "string"
+        },
+        "metadata_source": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "parser_confidence": {
+          "type": "string",
+          "enum": [
+            "high",
+            "medium",
+            "low"
+          ]
+        }
+      }
+    }
+  }
+}
