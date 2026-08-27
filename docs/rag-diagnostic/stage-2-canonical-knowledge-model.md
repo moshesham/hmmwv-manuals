@@ -19,7 +19,7 @@ The authoritative field definition lives in `schemas/rag-diagnostic/content-unit
 Key field groups:
 - Identity: content ID, manual ID, source path, anchor, heading.
 - Source location: line start, line end, chunk ID, excerpt.
-- Mode metadata: detected mode, selected mode, source of selection, confidence, persistence threshold.
+- Mode metadata: detected mode, selected mode, source of selection, confidence, persistence threshold, override allowed, automatic persistence allowed, clarification required.
 - Classification: unit type, manual role, chapter, section, subsystem, maintenance category.
 - Safety: warning, caution, and note blocks tied to the unit.
 - Procedure structure: initial setup, ordered steps, follow-on tasks.
