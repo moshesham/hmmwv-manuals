@@ -23,7 +23,7 @@ Key field groups:
 - Classification: unit type, manual role, chapter, section, subsystem, maintenance category.
 - Safety: warning, caution, and note blocks tied to the unit.
 - Procedure structure: initial setup, ordered steps, follow-on tasks.
-- Troubleshooting structure: symptom, condition, question, yes/no or ordered branches.
+- Troubleshooting structure: symptom, question, yes/no or ordered branches.
 - Diagnostic graph structure: flow container, nodes, edges, support panels, dual rendering metadata.
 - Relations: cross-manual references, image references, follow-on links.
 - Provenance: exact excerpt, metadata source, and parser confidence.
