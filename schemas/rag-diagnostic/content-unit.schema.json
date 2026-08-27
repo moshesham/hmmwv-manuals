@@ -734,7 +734,24 @@
         "subsystems": {
           "type": "array",
           "items": {
-            "type": "string"
+            "type": "string",
+            "enum": [
+              "engine",
+              "lubrication",
+              "fuel",
+              "electrical",
+              "charging",
+              "starting",
+              "cooling",
+              "transmission",
+              "transfer_case",
+              "brakes",
+              "steering",
+              "suspension",
+              "wheels_and_tires",
+              "body",
+              "heating_and_ventilation"
+            ]
           }
         },
         "maintenance_categories": {
