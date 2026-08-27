@@ -54,7 +54,7 @@
 - Retrieved evidence must map back to exact source excerpts.
 
 ### Mode behavior
-- Every response declares the active mode and whether it was inferred, inherited, or explicitly selected.
+- Every response declares the active mode and whether it was inferred, inherited, explicitly selected, or system-defaulted.
 - Users can override inferred mode in one action.
 - The system can hold a `mixed_or_uncertain` state without forcing unsafe assumptions.
 - Automatic mode persistence occurs only when session confidence exceeds the configured threshold.
