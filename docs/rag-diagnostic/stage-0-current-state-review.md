@@ -47,11 +47,11 @@ Establish a reliable baseline for the interactive diagnostic assistant before re
 - OCR artifacts and formatting noise are present in the corpus and should be treated as expected input conditions, not exceptions.
 
 ## Representative Evidence
-- Static-site configuration: `/home/runner/work/hmmwv-manuals/hmmwv-manuals/_config.yml`
-- Manual usage and troubleshooting guidance: `/home/runner/work/hmmwv-manuals/hmmwv-manuals/TM-9-2320-280-20-1/howto.md`
-- Maintenance task with `INITIAL SETUP` and `FOLLOW-ON TASKS`: `/home/runner/work/hmmwv-manuals/hmmwv-manuals/TM-9-2320-280-20-2/chapter3.md`
-- Diagnostic guide structure: `/home/runner/work/hmmwv-manuals/hmmwv-manuals/TM-9-2320-280-20-1/chapter2.md`
-- Operator troubleshooting sequence: `/home/runner/work/hmmwv-manuals/hmmwv-manuals/tm-9-2320-280-10/tm-9-2320-280-10.md`
+- Static-site configuration: `_config.yml`
+- Manual usage and troubleshooting guidance: `TM-9-2320-280-20-1/howto.md`
+- Maintenance task with `INITIAL SETUP` and `FOLLOW-ON TASKS`: `TM-9-2320-280-20-2/chapter3.md`
+- Diagnostic guide structure: `TM-9-2320-280-20-1/chapter2.md`
+- Operator troubleshooting sequence: `tm-9-2320-280-10/tm-9-2320-280-10.md`
 - OCR/page metadata: `/home/runner/work/hmmwv-manuals/hmmwv-manuals/TM-9-2320-280-20-1/TM-9-2320-280-20-1_meta.json`
 
 ## Current-State Conclusions
