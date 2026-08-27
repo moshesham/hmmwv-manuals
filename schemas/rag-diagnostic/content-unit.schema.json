@@ -173,7 +173,7 @@
         "override_allowed",
         "automatic_persistence_allowed",
         "requires_clarification"
-      ]
+      ],
       "properties": {
         "detected_mode": {
           "type": "string",

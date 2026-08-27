@@ -1,0 +1,21 @@
+# HMMWV RAG Diagnostic — Python Dependencies
+#
+# Install with:
+#   pip install -r requirements.txt
+#
+# All inference is local. No external API keys required.
+
+# ---- Core ingestion (Stage 3) ----
+jsonschema>=4.21,<5           # JSON schema validation for content units
+
+# ---- Embeddings + vector index (Stage 4) ----
+sentence-transformers>=2.7,<4  # Local embedding model (MiniLM / BGE)
+chromadb>=0.5,<1               # Local persistent vector store (no server needed)
+rank-bm25>=0.2,<1              # BM25 keyword index for hybrid retrieval
+numpy>=1.24,<3                 # Array ops for embeddings
+
+# ---- Optional: reranker (Stage 4, offline eval) ----
+# sentence-transformers already provides CrossEncoder
+
+# ---- Optional: ONNX runtime for faster CPU inference ----
+# onnxruntime>=1.17,<2          # Uncomment for ONNX-accelerated embedding
