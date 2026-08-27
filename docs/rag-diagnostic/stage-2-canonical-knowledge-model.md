@@ -14,7 +14,7 @@ The canonical content unit is the smallest independently retrievable manual segm
 5. Taxonomy is split between controlled routing metadata and flexible candidate vocabulary.
 
 ## Normalized Fields
-The authoritative field definition lives in `/home/runner/work/hmmwv-manuals/hmmwv-manuals/schemas/rag-diagnostic/content-unit.schema.json`.
+The authoritative field definition lives in `schemas/rag-diagnostic/content-unit.schema.json`.
 
 Key field groups:
 - Identity: content ID, manual ID, source path, anchor, heading.
