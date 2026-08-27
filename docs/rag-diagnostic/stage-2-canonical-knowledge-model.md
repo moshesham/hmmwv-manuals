@@ -129,7 +129,7 @@ Each unit must retain:
 For graph-backed flows, nodes and support panels may carry their own local provenance in addition to the flow container provenance.
 
 ## Semi-Controlled Taxonomy Model
-The baseline taxonomy lives in `/home/runner/work/hmmwv-manuals/hmmwv-manuals/schemas/rag-diagnostic/taxonomy.json`.
+The baseline taxonomy lives in `schemas/rag-diagnostic/taxonomy.json`.
 
 ### Controlled core
 - Manual role.
