@@ -1,0 +1,96 @@
+services:
+
+  # ─────────────────────────────────────────────────────────────────────────
+  # Stage 3: Ingestion pipeline
+  # Run: docker compose run --rm ingestion
+  # ─────────────────────────────────────────────────────────────────────────
+  ingestion:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: >
+      python -m ingestion.run_ingestion
+        --corpus-root /corpus
+        --output-dir /output/ingestion
+        --schema-path /corpus/schemas/rag-diagnostic/content-unit.schema.json
+        --taxonomy-path /corpus/schemas/rag-diagnostic/taxonomy.json
+    volumes:
+      - .:/corpus:ro
+      - ./output:/output
+    environment:
+      - PYTHONUNBUFFERED=1
+    profiles: ["ingestion"]
+
+  # ─────────────────────────────────────────────────────────────────────────
+  # Stage 4: Vector index builder
+  # Run: docker compose run --rm indexer
+  # ─────────────────────────────────────────────────────────────────────────
+  indexer:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: >
+      python -m vector_index.run_indexer
+        --content-units /output/ingestion/content-units.jsonl
+        --index-dir /output/vector_index
+        --model sentence-transformers/all-MiniLM-L6-v2
+        --device cpu
+    volumes:
+      - ./output:/output
+      - model-cache:/root/.cache/hmmwv-rag
+    environment:
+      - PYTHONUNBUFFERED=1
+    profiles: ["indexer"]
+
+  # ─────────────────────────────────────────────────────────────────────────
+  # Interactive query CLI (for testing retrieval)
+  # Run: docker compose run --rm query --query "engine does not start"
+  # ─────────────────────────────────────────────────────────────────────────
+  query:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    entrypoint: ["python", "-m", "vector_index.run_query",
+                 "--index-dir", "/output/vector_index",
+                 "--content-units", "/output/ingestion/content-units.jsonl"]
+    volumes:
+      - ./output:/output
+      - model-cache:/root/.cache/hmmwv-rag
+    environment:
+      - PYTHONUNBUFFERED=1
+    profiles: ["query"]
+
+  # ─────────────────────────────────────────────────────────────────────────
+  # Full pipeline: ingestion → indexer in sequence
+  # Run: docker compose run --rm pipeline
+  # ─────────────────────────────────────────────────────────────────────────
+  pipeline:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: >
+      sh -c "
+        python -m ingestion.run_ingestion
+          --corpus-root /corpus
+          --output-dir /output/ingestion
+          --schema-path /corpus/schemas/rag-diagnostic/content-unit.schema.json
+          --taxonomy-path /corpus/schemas/rag-diagnostic/taxonomy.json
+        &&
+        python -m vector_index.run_indexer
+          --content-units /output/ingestion/content-units.jsonl
+          --index-dir /output/vector_index
+          --model sentence-transformers/all-MiniLM-L6-v2
+          --device cpu
+      "
+    volumes:
+      - .:/corpus:ro
+      - ./output:/output
+      - model-cache:/root/.cache/hmmwv-rag
+    environment:
+      - PYTHONUNBUFFERED=1
+    profiles: ["pipeline"]
+
+volumes:
+  model-cache:
+    # Persists downloaded model weights across runs.
+    # First run downloads ~80 MB; subsequent runs are instant.
