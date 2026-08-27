@@ -44,6 +44,7 @@ from ingestion.parser import (
     BLOCK_TOC,
     BLOCK_TROUBLESHOOTING,
     RawBlock,
+    _detect_safety_type,
 )
 
 # Max plain-text length before a task is split into procedure_step_group sub-units
@@ -68,6 +69,45 @@ _RISK_KEYWORDS_RE = re.compile(
 # Maintenance mode indicators
 _MAINT_RE = re.compile(r"replace|remove|install|repair|adjust|torque|disassemble", re.IGNORECASE)
 _OPERATOR_RE = re.compile(r"operator|driver|pmcs|before\s+you\s+start", re.IGNORECASE)
+
+
+def _extract_inline_safety(body_lines: list[str]) -> tuple[list[SafetyBlock], list[SafetyBlock], list[SafetyBlock]]:
+    """
+    Scan a task block's body lines for inline safety headers (### Warning / ### Note / etc.)
+    that were kept in-body by the parser (fix 6). Returns (warnings, cautions, notes).
+    The function collects the text following each safety header until the next safety header
+    or a hard boundary line.
+    """
+    warns: list[SafetyBlock] = []
+    cauts: list[SafetyBlock] = []
+    nts: list[SafetyBlock] = []
+
+    i = 0
+    while i < len(body_lines):
+        stype = _detect_safety_type(body_lines[i])
+        if stype:
+            # Collect the safety body lines
+            safety_lines: list[str] = []
+            i += 1
+            while i < len(body_lines):
+                if _detect_safety_type(body_lines[i]):
+                    break
+                if body_lines[i].startswith("#"):
+                    break
+                safety_lines.append(body_lines[i])
+                i += 1
+            text = _plain_text(safety_lines)
+            block = SafetyBlock(safety_type=stype, text=text)
+            if stype == "warning":
+                warns.append(block)
+            elif stype == "caution":
+                cauts.append(block)
+            else:
+                nts.append(block)
+        else:
+            i += 1
+
+    return warns, cauts, nts
 
 
 def _plain_text(lines: list[str]) -> str:
@@ -257,9 +297,13 @@ def build_content_units(
     manual_role: str,
     source_path: str,
     chapter_name: str,
+    chunk_counter: Optional[dict[str, int]] = None,
 ) -> list[ContentUnit]:
     units: list[ContentUnit] = []
-    chunk_counter: dict[str, int] = {}
+    # Allow caller to pass in a shared counter so IDs remain unique across chapters
+    # within the same manual.  If not provided, create a local one (backwards compat).
+    if chunk_counter is None:
+        chunk_counter = {}
 
     # Group consecutive troubleshooting blocks for diagnostic_flow promotion
     trouble_groups: list[list[tuple[int, RawBlock]]] = []
@@ -296,6 +340,11 @@ def build_content_units(
             flow_id=flow_id,
             entry_node_ids=[node_ids[0]] if node_ids else [],
             node_ids=node_ids,
+            node_texts={
+                generate_content_id(manual_id, blk.anchor or f"node_{pos}", pos):
+                    _plain_text(blk.body_lines)[:300] or (blk.heading or "")
+                for pos, blk in group
+            },
             edges=edges,
             support_panel_ids=[],
         )
@@ -314,7 +363,7 @@ def build_content_units(
         prov = _make_provenance(group[0][1])
         mode = _infer_mode(title, plain_text)
 
-        content_id = generate_content_id(manual_id, f"flow_{group[0][1].anchor}", 0)
+        content_id = generate_content_id(manual_id, f"flow_{group[0][1].anchor or group[0][0]}", 0)
         chunk_counter[content_id] = chunk_counter.get(content_id, 0) + 1
 
         units.append(ContentUnit(
@@ -403,7 +452,7 @@ def build_content_units(
             prov = _make_provenance(block)
             mode = _infer_mode(title, plain)
 
-            # Attach pending safety blocks
+            # Attach pending safety blocks (standalone BLOCK_SAFETY blocks preceding this task)
             warns = [SafetyBlock(safety_type="warning", text=_plain_text(b.body_lines), source_line=b.line_start)
                      for stype, b in pending_safety if stype == "warning"]
             cauts = [SafetyBlock(safety_type="caution", text=_plain_text(b.body_lines), source_line=b.line_start)
@@ -411,6 +460,13 @@ def build_content_units(
             nts = [SafetyBlock(safety_type="note", text=_plain_text(b.body_lines), source_line=b.line_start)
                    for stype, b in pending_safety if stype == "note"]
             pending_safety = []
+
+            # Also extract inline safety blocks folded into this task's body_lines (fix 6)
+            if block.block_type == BLOCK_TASK:
+                inline_warns, inline_cauts, inline_nts = _extract_inline_safety(block.body_lines)
+                warns.extend(inline_warns)
+                cauts.extend(inline_cauts)
+                nts.extend(inline_nts)
 
             procedure = _build_procedure(block) if block.block_type == BLOCK_TASK else None
             content_id = generate_content_id(

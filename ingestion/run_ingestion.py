@@ -74,15 +74,20 @@ def run(
     # 2. Parse + chunk
     print("Step 2/7  Parsing and chunking...")
     all_units: list[ContentUnit] = []
+    # One counter per manual to guarantee unique IDs across chapters within the same manual
+    manual_chunk_counters: dict[str, dict[str, int]] = {}
     for rec in sources:
         t1 = time.perf_counter()
         raw_blocks = parse_chapter(rec.chapter_path, rec.manual_id, rec.manual_role)
+        if rec.manual_id not in manual_chunk_counters:
+            manual_chunk_counters[rec.manual_id] = {}
         units = build_content_units(
             raw_blocks,
             manual_id=rec.manual_id,
             manual_role=rec.manual_role,
             source_path=str(rec.chapter_path),
             chapter_name=rec.chapter_name,
+            chunk_counter=manual_chunk_counters[rec.manual_id],
         )
         all_units.extend(units)
         elapsed = time.perf_counter() - t1

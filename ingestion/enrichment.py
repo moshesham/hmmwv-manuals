@@ -33,34 +33,40 @@ def build_keyword_index(
     Build an inverted index: term → sorted list of content_ids.
 
     Terms are drawn from:
-      - Taxonomy controlled terms and candidate terms
+      - taxonomy.json controlled_core.subsystems and maintenance_categories
+      - taxonomy.json seed_mappings symptoms and components (all surface forms)
       - Unit taxonomy fields (symptom_terms, component_terms, tool_terms)
     """
-    # Load taxonomy to get approved term lists
     controlled_terms: set[str] = set()
     if taxonomy_path.exists():
         tax_data = json.loads(taxonomy_path.read_text(encoding="utf-8"))
-        for section in ("symptom_terms", "component_terms", "tool_terms"):
-            terms = tax_data.get(section, [])
-            if isinstance(terms, list):
-                for t in terms:
-                    if isinstance(t, str):
-                        controlled_terms.add(t.lower())
-                    elif isinstance(t, dict):
-                        for v in t.values():
-                            if isinstance(v, str):
-                                controlled_terms.add(v.lower())
-        # Also ingest subsystem values
-        for sub in tax_data.get("subsystems", []):
+
+        # controlled_core: subsystems and maintenance_categories
+        core = tax_data.get("controlled_core", {})
+        for sub in core.get("subsystems", []):
             if isinstance(sub, str):
+                controlled_terms.add(sub.lower().replace("_", " "))
                 controlled_terms.add(sub.lower())
+        for cat in core.get("maintenance_categories", []):
+            if isinstance(cat, str):
+                controlled_terms.add(cat.lower())
+
+        # seed_mappings: symptoms and components surface forms
+        seed = tax_data.get("seed_mappings", {})
+        for group in seed.values():                      # symptoms / components / ...
+            if isinstance(group, dict):
+                for surface_forms in group.values():     # list of strings per canonical term
+                    if isinstance(surface_forms, list):
+                        for form in surface_forms:
+                            if isinstance(form, str):
+                                controlled_terms.add(form.lower())
 
     index: dict[str, set[str]] = defaultdict(set)
 
     for unit in units:
         cid = unit.content_id
 
-        # From taxonomy fields
+        # From taxonomy fields on the unit (populated by enrichment / future NLP pass)
         for term in unit.taxonomy.symptom_terms + unit.taxonomy.component_terms + unit.taxonomy.tool_terms:
             index[term.lower()].add(cid)
 
@@ -70,7 +76,7 @@ def build_keyword_index(
             if term in combined_text:
                 index[term].add(cid)
 
-        # From candidate_terms
+        # From candidate_terms stored on the unit
         for ct in unit.taxonomy.candidate_terms:
             term = ct.get("term", "").lower()
             if term:

@@ -215,6 +215,22 @@ def parse_chapter(path: Path, manual_id: str, manual_role: str) -> list[RawBlock
         # Detect safety heading
         safety_type = _detect_safety_type(line)
         if safety_type:
+            # If we are inside an open task block, keep safety inline rather than
+            # flushing — this prevents the task's step content from being cut off.
+            if current_block_type == BLOCK_TASK:
+                current_body.append(line)
+                i += 1
+                # Absorb the safety body lines into the task block
+                while i < len(lines):
+                    next_line = lines[i]
+                    if next_line.startswith("#") or _ANCHOR_RE.search(next_line):
+                        break
+                    if _detect_safety_type(next_line):
+                        break
+                    current_body.append(next_line)
+                    i += 1
+                continue
+            # Outside a task — flush previous block and emit a standalone safety block
             _flush(i)
             current_block_type = BLOCK_SAFETY
             current_safety_type = safety_type

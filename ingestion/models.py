@@ -114,6 +114,7 @@ class DiagnosticFlowBlock:
     flow_id: str
     entry_node_ids: list[str] = field(default_factory=list)
     node_ids: list[str] = field(default_factory=list)
+    node_texts: dict[str, str] = field(default_factory=dict)  # node_id → heading/body text
     edges: list[DiagnosticEdge] = field(default_factory=list)
     support_panel_ids: list[str] = field(default_factory=list)
 
@@ -311,11 +312,11 @@ class ContentUnit:
             if self.procedure.steps:
                 d["procedure_steps"] = [
                     {
-                        "sequence": str(idx + 1),
+                        "sequence": step.step_number,
                         "text": step.text,
                         "phase": "execution",
                     }
-                    for idx, step in enumerate(self.procedure.steps)
+                    for step in self.procedure.steps
                 ]
             if self.procedure.follow_on_tasks:
                 d["follow_on_tasks"] = [
@@ -325,11 +326,24 @@ class ContentUnit:
 
         # Troubleshooting — map to schema troubleshooting block
         if self.troubleshooting:
+            # Serialize branches into decision_order (condition labels) and actions (target descriptions)
+            decision_order = [b.condition for b in self.troubleshooting.branches]
+            actions = [
+                b.target_text or (f"Go to {b.target_anchor}" if b.target_anchor else b.condition)
+                for b in self.troubleshooting.branches
+            ]
+            # Distinguish symptom from question: symptom is the observable problem description,
+            # question is the check prompt. If both come from the heading, deduplicate.
+            symptom = self.troubleshooting.symptom or ""
+            question = self.troubleshooting.question or ""
+            if symptom == question:
+                # Heading is both the symptom and the check question — acceptable; leave as-is
+                pass
             d["troubleshooting"] = {
-                "symptom": self.troubleshooting.symptom or "",
-                "question": self.troubleshooting.question or "",
-                "decision_order": [],
-                "actions": [],
+                "symptom": symptom,
+                "question": question,
+                "decision_order": decision_order,
+                "actions": actions,
                 "escalation": None,
             }
 
@@ -343,7 +357,7 @@ class ContentUnit:
                     "retrieval_identity": df.flow_id,
                 },
                 "nodes": [
-                    {"node_id": n, "node_type": "check", "text": ""}
+                    {"node_id": n, "node_type": "check", "text": df.node_texts.get(n, "")}
                     for n in df.node_ids
                 ],
                 "edges": [
