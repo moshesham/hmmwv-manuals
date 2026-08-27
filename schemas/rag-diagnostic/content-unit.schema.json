@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://moshesham.github.io/hmmwv-manuals/schemas/rag-diagnostic/content-unit.schema.json",
   "title": "RAG Diagnostic Content Unit",
-  "description": "Canonical content unit for interactive HMMWV diagnostic retrieval and grounding.",
+  "description": "Canonical content unit for interactive HMMWV diagnostic retrieval, routing, and grounding.",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -10,6 +10,7 @@
     "content_id",
     "manual_id",
     "manual_role",
+    "mode",
     "source",
     "unit_type",
     "title",
@@ -21,7 +22,7 @@
   "properties": {
     "schema_version": {
       "type": "string",
-      "const": "1.0.0"
+      "const": "1.1.0"
     },
     "content_id": {
       "type": "string",
@@ -40,6 +41,9 @@
         "other"
       ]
     },
+    "mode": {
+      "$ref": "#/$defs/mode"
+    },
     "unit_type": {
       "type": "string",
       "enum": [
@@ -47,6 +51,8 @@
         "procedure_step_group",
         "troubleshooting_entry",
         "diagnostic_flow",
+        "diagnostic_flow_node",
+        "diagnostic_support_panel",
         "reference_section",
         "safety_summary"
       ]
@@ -90,7 +96,14 @@
       "default": []
     },
     "initial_setup": {
-      "$ref": "#/$defs/initialSetup"
+      "anyOf": [
+        {
+          "$ref": "#/$defs/initialSetup"
+        },
+        {
+          "type": "null"
+        }
+      ]
     },
     "procedure_steps": {
       "type": "array",
@@ -107,7 +120,24 @@
       "default": []
     },
     "troubleshooting": {
-      "$ref": "#/$defs/troubleshooting"
+      "anyOf": [
+        {
+          "$ref": "#/$defs/troubleshooting"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "diagnostic_graph": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/diagnosticGraph"
+        },
+        {
+          "type": "null"
+        }
+      ]
     },
     "relations": {
       "type": "array",
@@ -131,6 +161,69 @@
     }
   },
   "$defs": {
+    "mode": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "detected_mode",
+        "selected_mode",
+        "selection_source",
+        "confidence_score",
+        "persistence_threshold",
+        "override_allowed",
+        "requires_clarification"
+      ],
+      "properties": {
+        "detected_mode": {
+          "type": "string",
+          "enum": [
+            "operator",
+            "maintenance",
+            "mixed_or_uncertain"
+          ]
+        },
+        "selected_mode": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            "operator",
+            "maintenance",
+            "mixed_or_uncertain",
+            null
+          ]
+        },
+        "selection_source": {
+          "type": "string",
+          "enum": [
+            "inferred",
+            "explicit",
+            "inherited",
+            "system_default"
+          ]
+        },
+        "confidence_score": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "persistence_threshold": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "override_allowed": {
+          "type": "boolean"
+        },
+        "automatic_persistence_allowed": {
+          "type": "boolean"
+        },
+        "requires_clarification": {
+          "type": "boolean"
+        }
+      }
+    },
     "source": {
       "type": "object",
       "additionalProperties": false,
@@ -331,6 +424,222 @@
         }
       }
     },
+    "diagnosticGraph": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "flow_container",
+        "nodes",
+        "edges",
+        "support_panels",
+        "render_views"
+      ],
+      "properties": {
+        "flow_container": {
+          "$ref": "#/$defs/flowContainer"
+        },
+        "nodes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/diagnosticNode"
+          },
+          "minItems": 1
+        },
+        "edges": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/diagnosticEdge"
+          },
+          "default": []
+        },
+        "support_panels": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/supportPanel"
+          },
+          "default": []
+        },
+        "render_views": {
+          "$ref": "#/$defs/renderViews"
+        }
+      }
+    },
+    "flowContainer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "flow_id",
+        "entry_node_ids",
+        "retrieval_identity"
+      ],
+      "properties": {
+        "flow_id": {
+          "type": "string"
+        },
+        "entry_node_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1
+        },
+        "retrieval_identity": {
+          "type": "string"
+        },
+        "source_span_label": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "diagnosticNode": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "node_id",
+        "node_type",
+        "text"
+      ],
+      "properties": {
+        "node_id": {
+          "type": "string"
+        },
+        "node_type": {
+          "type": "string",
+          "enum": [
+            "question",
+            "action",
+            "check",
+            "outcome",
+            "escalation",
+            "reference"
+          ]
+        },
+        "text": {
+          "type": "string"
+        },
+        "support_panel_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": []
+        },
+        "node_provenance": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/provenance"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "diagnosticEdge": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "edge_id",
+        "from_node_id",
+        "to_node_id",
+        "condition_label"
+      ],
+      "properties": {
+        "edge_id": {
+          "type": "string"
+        },
+        "from_node_id": {
+          "type": "string"
+        },
+        "to_node_id": {
+          "type": "string"
+        },
+        "condition_label": {
+          "type": "string"
+        }
+      }
+    },
+    "supportPanel": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "panel_id",
+        "panel_type",
+        "content"
+      ],
+      "properties": {
+        "panel_id": {
+          "type": "string"
+        },
+        "panel_type": {
+          "type": "string",
+          "enum": [
+            "instruction",
+            "note",
+            "warning",
+            "caution",
+            "measurement_help",
+            "reference"
+          ]
+        },
+        "title": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "content": {
+          "type": "string"
+        },
+        "panel_provenance": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/provenance"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "renderViews": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "retrieval_view",
+        "technician_view",
+        "default_entry_node_id"
+      ],
+      "properties": {
+        "retrieval_view": {
+          "type": "string",
+          "enum": [
+            "graph_nodes"
+          ]
+        },
+        "technician_view": {
+          "type": "string",
+          "enum": [
+            "guided_path"
+          ]
+        },
+        "default_entry_node_id": {
+          "type": "string"
+        },
+        "preferred_linearization": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": []
+        }
+      }
+    },
     "relation": {
       "type": "object",
       "additionalProperties": false,
@@ -346,7 +655,9 @@
             "follow_on_reference",
             "cross_manual_reference",
             "image_reference",
-            "task_reference"
+            "task_reference",
+            "flow_reference",
+            "support_panel_reference"
           ]
         },
         "label": {
@@ -382,25 +693,44 @@
       "type": "object",
       "additionalProperties": false,
       "required": [
+        "controlled_core",
+        "candidate_terms",
+        "quarantine_terms",
+        "extracted_requirements"
+      ],
+      "properties": {
+        "controlled_core": {
+          "$ref": "#/$defs/controlledCore"
+        },
+        "candidate_terms": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/candidateTerm"
+          },
+          "default": []
+        },
+        "quarantine_terms": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/quarantinedTerm"
+          },
+          "default": []
+        },
+        "extracted_requirements": {
+          "$ref": "#/$defs/extractedRequirements"
+        }
+      }
+    },
+    "controlledCore": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
         "subsystems",
-        "symptoms",
-        "components",
-        "maintenance_categories"
+        "maintenance_categories",
+        "safety_types"
       ],
       "properties": {
         "subsystems": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "symptoms": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        },
-        "components": {
           "type": "array",
           "items": {
             "type": "string"
@@ -412,6 +742,108 @@
             "type": "string"
           }
         },
+        "safety_types": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "candidateTerm": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "candidate_type",
+        "original_term",
+        "normalized_term",
+        "confidence_score"
+      ],
+      "properties": {
+        "candidate_type": {
+          "type": "string",
+          "enum": [
+            "symptom",
+            "component",
+            "alias",
+            "ocr_noise"
+          ]
+        },
+        "original_term": {
+          "type": "string"
+        },
+        "normalized_term": {
+          "type": "string"
+        },
+        "confidence_score": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "canonical_label": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "quarantinedTerm": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "candidate_type",
+        "original_term",
+        "normalized_term",
+        "confidence_score",
+        "quarantine_reason"
+      ],
+      "properties": {
+        "candidate_type": {
+          "type": "string",
+          "enum": [
+            "symptom",
+            "component",
+            "alias",
+            "ocr_noise"
+          ]
+        },
+        "original_term": {
+          "type": "string"
+        },
+        "normalized_term": {
+          "type": "string"
+        },
+        "confidence_score": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "canonical_label": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "quarantine_reason": {
+          "type": "string",
+          "enum": [
+            "low_confidence",
+            "ambiguous_mapping",
+            "ocr_noise",
+            "needs_review"
+          ]
+        }
+      }
+    },
+    "extractedRequirements": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "tools",
+        "materials"
+      ],
+      "properties": {
         "tools": {
           "type": "array",
           "items": {

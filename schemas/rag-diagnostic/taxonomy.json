@@ -1,79 +1,115 @@
 {
-  "schema_version": "1.0.0",
-  "manual_roles": [
-    "operator",
-    "maintenance",
-    "parts",
-    "engine",
-    "other"
-  ],
-  "subsystems": [
-    "engine",
-    "lubrication",
-    "fuel",
-    "electrical",
-    "charging",
-    "starting",
-    "cooling",
-    "transmission",
-    "transfer_case",
-    "brakes",
-    "steering",
-    "suspension",
-    "wheels_and_tires",
-    "body",
-    "heating_and_ventilation"
-  ],
-  "symptoms": [
-    "engine_fails_to_crank",
-    "engine_cranks_slowly",
-    "engine_cranks_but_does_not_start",
-    "vehicle_not_charging",
-    "excessive_exhaust_smoke",
-    "fluid_leak",
-    "oil_leak",
-    "overheating",
-    "abnormal_noise",
-    "loss_of_power"
-  ],
-  "maintenance_categories": [
-    "inspection",
-    "testing",
-    "troubleshooting",
-    "removal",
-    "installation",
-    "replacement",
-    "adjustment",
-    "cleaning",
-    "servicing",
-    "repair"
-  ],
-  "safety_types": [
-    "warning",
-    "caution",
-    "note"
-  ],
-  "component_seeds": {
-    "engine": [
-      "engine oil dipstick tube",
-      "engine oil filler tube",
-      "oil cooler assembly",
-      "air cleaner"
+  "schema_version": "1.1.0",
+  "controlled_core": {
+    "manual_roles": [
+      "operator",
+      "maintenance",
+      "parts",
+      "engine",
+      "other"
     ],
-    "electrical": [
-      "battery",
-      "battery cables",
-      "diagnostic connector assembly",
-      "voltmeter"
+    "subsystems": [
+      "engine",
+      "lubrication",
+      "fuel",
+      "electrical",
+      "charging",
+      "starting",
+      "cooling",
+      "transmission",
+      "transfer_case",
+      "brakes",
+      "steering",
+      "suspension",
+      "wheels_and_tires",
+      "body",
+      "heating_and_ventilation"
     ],
-    "charging": [
-      "alternator",
-      "alternator belts"
+    "maintenance_categories": [
+      "inspection",
+      "testing",
+      "troubleshooting",
+      "removal",
+      "installation",
+      "replacement",
+      "adjustment",
+      "cleaning",
+      "servicing",
+      "repair"
     ],
-    "wheels_and_tires": [
-      "wheel studs",
-      "locknuts",
-      "tire assembly"
+    "safety_types": [
+      "warning",
+      "caution",
+      "note"
     ]
+  },
+  "candidate_vocabulary": {
+    "candidate_term_types": [
+      "symptom",
+      "component",
+      "alias",
+      "ocr_noise"
+    ],
+    "confidence_bands": {
+      "high": [
+        0.85,
+        1.0
+      ],
+      "medium": [
+        0.6,
+        0.84
+      ],
+      "low": [
+        0.0,
+        0.59
+      ]
+    },
+    "quarantine_reasons": [
+      "low_confidence",
+      "ambiguous_mapping",
+      "ocr_noise",
+      "needs_review"
+    ]
+  },
+  "seed_mappings": {
+    "symptoms": {
+      "engine_fails_to_crank": [
+        "engine fails to crank",
+        "no crank"
+      ],
+      "engine_cranks_slowly": [
+        "engine cranks slowly",
+        "slow crank"
+      ],
+      "engine_cranks_but_does_not_start": [
+        "engine cranks but does not start",
+        "no start"
+      ],
+      "vehicle_not_charging": [
+        "vehicle not charging",
+        "not charging"
+      ]
+    },
+    "components": {
+      "engine oil dipstick tube": [
+        "engine oil dipstick tube",
+        "dipstick tube"
+      ],
+      "battery": [
+        "battery",
+        "batteries"
+      ],
+      "alternator": [
+        "alternator"
+      ],
+      "diagnostic flowchart": [
+        "diagnostic flowchart",
+        "diagnostic logic"
+      ]
+    }
+  },
+  "quarantine_policy": {
+    "description": "Quarantined terms are preserved during ingestion but excluded from routing filters until reviewed or mapped.",
+    "include_in_filters": false
   }
 }

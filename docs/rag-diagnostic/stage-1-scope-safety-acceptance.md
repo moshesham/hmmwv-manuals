@@ -20,13 +20,23 @@
 - Coverage expansion beyond the MVP manuals.
 
 ## Operating Modes
-### Operator mode
-- Primary source emphasis: `tm-9-2320-280-10`.
-- Goal: identify simple corrective action or escalation to maintenance.
+### Hybrid mode model
+- Default behavior is inferred-first.
+- The detected mode must always be shown prominently to the user.
+- The user must be able to override mode selection directly to `operator` or `maintenance`.
+- The system must support a third state: `mixed_or_uncertain`.
+- In `mixed_or_uncertain`, the system must ask a clarification question before giving procedural advice.
 
-### Maintenance mode
-- Primary source emphasis: `TM-9-2320-280-20-1/2/3`.
-- Goal: identify grounded diagnostic and repair procedures with task-level traceability.
+### Mode states
+- `operator`: prioritize operator-level guidance and escalation boundaries.
+- `maintenance`: prioritize unit-maintenance diagnostics and task procedures.
+- `mixed_or_uncertain`: detected evidence spans roles or confidence is too low for safe routing.
+
+### Session confidence behavior
+- Maintain a session mode confidence score.
+- Allow automatic persistence of inferred mode only after confidence exceeds a defined threshold.
+- Reset or lower confidence when a new question introduces conflicting role signals.
+- Treat explicit user override as authoritative until the session context materially changes.
 
 ## Safety Requirements
 1. Always surface relevant warnings, cautions, and notes before the associated procedure or decision step.
@@ -34,13 +44,20 @@
 3. When the source material is ambiguous, conflicting, or absent, respond with insufficient-evidence behavior instead of improvisation.
 4. Preserve maintenance ordering when presenting step sequences.
 5. Preserve escalation boundaries when the manual directs the user to supervisor, unit maintenance, or another referenced manual.
-6. Keep user-visible answers grounded to the selected operating mode to avoid mixing operator and maintenance instructions without notice.
+6. Keep user-visible answers grounded to the selected or detected mode and do not silently mix operator and maintenance guidance.
+7. Require clarification before procedural advice whenever mode remains mixed or uncertain.
 
 ## Acceptance Criteria
 ### Retrieval and grounding
 - The system can limit retrieval to MVP manuals only.
 - Every returned answer includes source manual, source path, and source anchor or equivalent chunk identifier.
 - Retrieved evidence must map back to exact source excerpts.
+
+### Mode behavior
+- Every response declares the active mode and whether it was inferred, inherited, or explicitly selected.
+- Users can override inferred mode in one action.
+- The system can hold a `mixed_or_uncertain` state without forcing unsafe assumptions.
+- Automatic mode persistence occurs only when session confidence exceeds the configured threshold.
 
 ### Diagnostic behavior
 - Symptom queries return a ranked diagnostic path or an explicit insufficient-evidence response.
@@ -51,6 +68,7 @@
 - Procedure answers maintain source step order.
 - `INITIAL SETUP` requirements and `FOLLOW-ON TASKS` remain attached to the same task response.
 - Safety blocks attached to a task are shown with that task.
+- Procedural answers are blocked pending clarification when mode is `mixed_or_uncertain`.
 
 ### Offline and operational constraints
 - Design assumptions must support fully local execution in later stages.
@@ -58,32 +76,39 @@
 
 ## Review Gates
 ### Gate 1 - scope fit
-- The query can be classified as operator, maintenance, or unsupported.
+- The query can be classified as operator, maintenance, or mixed/uncertain.
 - Unsupported requests are rejected or narrowed without hallucinated guidance.
 
-### Gate 2 - safety fit
+### Gate 2 - mode fit
+- The system shows detected mode and confidence to the orchestration layer.
+- Explicit overrides take precedence over inference.
+- Low-confidence mode selection cannot silently persist into procedural guidance.
+
+### Gate 3 - safety fit
 - Answers fail closed when citation or safety attachment is missing.
 - High-risk procedural responses cannot bypass associated warnings.
+- Mixed/uncertain mode forces clarification before procedural instruction.
 
-### Gate 3 - evidence fit
+### Gate 4 - evidence fit
 - Evidence can be inspected by a reviewer without external systems.
 - A reviewer can trace an answer back to a file and excerpt.
 
 ## Challenged Assumptions
 - Assumption: one generic query flow is enough.
   - Challenge: operator and maintenance journeys have different evidence and escalation expectations.
-- Assumption: citations alone make answers safe.
-  - Challenge: warnings and order preservation are separate acceptance requirements.
-- Assumption: MVP should cover all manuals because they already exist.
-  - Challenge: a smaller boundary improves validation quality and safety discipline.
+- Assumption: the user should always pick a mode up front.
+  - Challenge: explicit-only mode adds friction and slows field use.
+- Assumption: the system should always infer and proceed.
+  - Challenge: inference-only mode risks unsafe cross-role answers.
 
 ## Decisions Made
 1. Use four manuals only for the MVP boundary.
-2. Treat operator and maintenance experiences as separate modes sharing a common evidence model.
-3. Make insufficient-evidence behavior a first-class success condition, not a failure case.
-4. Require source traceability at the content-unit level before later retrieval work begins.
+2. Use a hybrid mode model with inference first, visible confirmation, and direct override.
+3. Treat `mixed_or_uncertain` as a valid operating state that blocks procedural advice pending clarification.
+4. Allow inferred mode persistence only after session confidence exceeds a threshold.
+5. Require source traceability at the content-unit level before later retrieval work begins.
 
-## Open Questions
-1. Should the first release force the user to choose operator or maintenance mode, or infer it from the question and cited sources?
-2. What threshold should later stages use to decide between ranked guidance and insufficient evidence?
-3. Are cross-manual answers allowed when the primary cited task references another manual, or should the system require explicit user confirmation?
+## Residual Questions
+1. What initial threshold should later orchestration stages use for automatic mode persistence?
+2. Should the first procedural answer always include a mode-confirmation affordance even at high confidence?
+3. How should later stages summarize conflicting evidence when a session shifts from operator to maintenance intent?

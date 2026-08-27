@@ -1,9 +1,19 @@
 [
   {
-    "schema_version": "1.0.0",
+    "schema_version": "1.1.0",
     "content_id": "TM-9-2320-280-20-2_3-2",
     "manual_id": "TM-9-2320-280-20-2",
     "manual_role": "maintenance",
+    "mode": {
+      "detected_mode": "maintenance",
+      "selected_mode": "maintenance",
+      "selection_source": "inferred",
+      "confidence_score": 0.93,
+      "persistence_threshold": 0.8,
+      "override_allowed": true,
+      "automatic_persistence_allowed": true,
+      "requires_clarification": false
+    },
     "unit_type": "procedure_task",
     "title": "3-2. Engine Oil Dipstick Tube Replacement",
     "chapter": "3",
@@ -71,6 +81,7 @@
       }
     ],
     "troubleshooting": null,
+    "diagnostic_graph": null,
     "relations": [
       {
         "type": "manual_reference",
@@ -90,28 +101,55 @@
       }
     ],
     "taxonomy": {
-      "subsystems": [
-        "engine",
-        "lubrication"
+      "controlled_core": {
+        "subsystems": [
+          "engine",
+          "lubrication"
+        ],
+        "maintenance_categories": [
+          "replacement",
+          "removal",
+          "installation"
+        ],
+        "safety_types": []
+      },
+      "candidate_terms": [
+        {
+          "candidate_type": "component",
+          "original_term": "oil dipstick tube",
+          "normalized_term": "engine oil dipstick tube",
+          "confidence_score": 0.97,
+          "canonical_label": "engine oil dipstick tube"
+        },
+        {
+          "candidate_type": "alias",
+          "original_term": "dipstick tube",
+          "normalized_term": "dipstick tube",
+          "confidence_score": 0.74,
+          "canonical_label": "engine oil dipstick tube"
+        }
       ],
-      "symptoms": [],
-      "components": [
-        "engine oil dipstick tube"
+      "quarantine_terms": [
+        {
+          "candidate_type": "ocr_noise",
+          "original_term": "plain-assembled",
+          "normalized_term": "plain assembled",
+          "confidence_score": 0.42,
+          "canonical_label": null,
+          "quarantine_reason": "needs_review"
+        }
       ],
-      "maintenance_categories": [
-        "replacement",
-        "removal",
-        "installation"
-      ],
-      "tools": [
-        "General mechanic's tool kit",
-        "Hex-head driver, 8 mm"
-      ],
-      "materials": [
-        "O-ring",
-        "Plain-assembled nut",
-        "Sealant"
-      ]
+      "extracted_requirements": {
+        "tools": [
+          "General mechanic's tool kit",
+          "Hex-head driver, 8 mm"
+        ],
+        "materials": [
+          "O-ring",
+          "Plain-assembled nut",
+          "Sealant"
+        ]
+      }
     },
     "provenance": {
       "excerpt": "### 3-2. Engine Oil Dipstick Tube Replacement ... FOLLOW-ON TASKS: - Start engine (TM 9-2320-280-10) and check for oil leaks. - Lower and secure hood (TM 9-2320-280-10).",
@@ -121,10 +159,20 @@
     }
   },
   {
-    "schema_version": "1.0.0",
+    "schema_version": "1.1.0",
     "content_id": "TM-9-2320-280-10_3-2_engine-fails-to-crank",
     "manual_id": "TM-9-2320-280-10",
     "manual_role": "operator",
+    "mode": {
+      "detected_mode": "operator",
+      "selected_mode": "operator",
+      "selection_source": "inferred",
+      "confidence_score": 0.89,
+      "persistence_threshold": 0.8,
+      "override_allowed": true,
+      "automatic_persistence_allowed": true,
+      "requires_clarification": false
+    },
     "unit_type": "troubleshooting_entry",
     "title": "Engine Fails To Crank",
     "chapter": "3",
@@ -159,6 +207,7 @@
       ],
       "escalation": "Notify unit maintenance."
     },
+    "diagnostic_graph": null,
     "relations": [
       {
         "type": "task_reference",
@@ -168,26 +217,40 @@
     ],
     "image_refs": [],
     "taxonomy": {
-      "subsystems": [
-        "engine",
-        "starting",
-        "electrical"
+      "controlled_core": {
+        "subsystems": [
+          "engine",
+          "starting",
+          "electrical"
+        ],
+        "maintenance_categories": [
+          "troubleshooting",
+          "inspection",
+          "testing"
+        ],
+        "safety_types": []
+      },
+      "candidate_terms": [
+        {
+          "candidate_type": "symptom",
+          "original_term": "Engine Fails To Crank",
+          "normalized_term": "engine fails to crank",
+          "confidence_score": 0.99,
+          "canonical_label": "engine_fails_to_crank"
+        },
+        {
+          "candidate_type": "component",
+          "original_term": "battery connections",
+          "normalized_term": "battery connections",
+          "confidence_score": 0.91,
+          "canonical_label": "battery"
+        }
       ],
-      "symptoms": [
-        "engine_fails_to_crank"
-      ],
-      "components": [
-        "transmission shift lever",
-        "battery",
-        "battery connections"
-      ],
-      "maintenance_categories": [
-        "troubleshooting",
-        "inspection",
-        "testing"
-      ],
-      "tools": [],
-      "materials": []
+      "quarantine_terms": [],
+      "extracted_requirements": {
+        "tools": [],
+        "materials": []
+      }
     },
     "provenance": {
       "excerpt": "#### 1. Engine Fails To Crank ... Step 3. Attempt to slave-start vehicle (para. 2-23). Step 4. Other causes. Notify unit maintenance.",
@@ -197,10 +260,20 @@
     }
   },
   {
-    "schema_version": "1.0.0",
-    "content_id": "TM-9-2320-280-20-1_2-14_page-layout",
+    "schema_version": "1.1.0",
+    "content_id": "TM-9-2320-280-20-1_2-14_page-layout-flow",
     "manual_id": "TM-9-2320-280-20-1",
     "manual_role": "maintenance",
+    "mode": {
+      "detected_mode": "mixed_or_uncertain",
+      "selected_mode": "mixed_or_uncertain",
+      "selection_source": "system_default",
+      "confidence_score": 0.52,
+      "persistence_threshold": 0.8,
+      "override_allowed": true,
+      "automatic_persistence_allowed": false,
+      "requires_clarification": true
+    },
     "unit_type": "diagnostic_flow",
     "title": "2-14. How To Use This Troubleshooting Guide - Page Layout",
     "chapter": "2",
@@ -231,7 +304,118 @@
       "actions": [],
       "escalation": null
     },
-    "relations": [],
+    "diagnostic_graph": {
+      "flow_container": {
+        "flow_id": "TM-9-2320-280-20-1_ch2_2-14_flow",
+        "entry_node_ids": [
+          "node_select_test"
+        ],
+        "retrieval_identity": "maintenance-troubleshooting-page-layout",
+        "source_span_label": "page-layout and diagnostic-procedure guidance"
+      },
+      "nodes": [
+        {
+          "node_id": "node_select_test",
+          "node_type": "question",
+          "text": "Select either a top level or a system level test.",
+          "support_panel_ids": [
+            "panel_reference_layout"
+          ],
+          "node_provenance": {
+            "excerpt": "PICK THE TESTS: Select either a top level or a system level test.",
+            "chunk_id": "TM-9-2320-280-20-1_ch2_2-14_node_select_test",
+            "metadata_source": "TM-9-2320-280-20-1/TM-9-2320-280-20-1_meta.json",
+            "parser_confidence": "high"
+          }
+        },
+        {
+          "node_id": "node_answer_question",
+          "node_type": "action",
+          "text": "Answer the question on the left hand page and follow the YES or NO path.",
+          "support_panel_ids": [
+            "panel_measurement_help"
+          ],
+          "node_provenance": {
+            "excerpt": "Just answer the questions on the left hand page. Follow the YES or NO path to the next step.",
+            "chunk_id": "TM-9-2320-280-20-1_ch2_2-14_node_answer_question",
+            "metadata_source": "TM-9-2320-280-20-1/TM-9-2320-280-20-1_meta.json",
+            "parser_confidence": "high"
+          }
+        },
+        {
+          "node_id": "node_seek_support",
+          "node_type": "reference",
+          "text": "Use the right hand page for notes, instructions, and help when uncertain.",
+          "support_panel_ids": [
+            "panel_reference_layout",
+            "panel_measurement_help"
+          ],
+          "node_provenance": {
+            "excerpt": "If you aren't sure about a question or procedure, look on the right page for notes, instructions and help.",
+            "chunk_id": "TM-9-2320-280-20-1_ch2_2-14_node_seek_support",
+            "metadata_source": "TM-9-2320-280-20-1/TM-9-2320-280-20-1_meta.json",
+            "parser_confidence": "medium"
+          }
+        }
+      ],
+      "edges": [
+        {
+          "edge_id": "edge_1",
+          "from_node_id": "node_select_test",
+          "to_node_id": "node_answer_question",
+          "condition_label": "continue"
+        },
+        {
+          "edge_id": "edge_2",
+          "from_node_id": "node_answer_question",
+          "to_node_id": "node_seek_support",
+          "condition_label": "uncertain"
+        }
+      ],
+      "support_panels": [
+        {
+          "panel_id": "panel_reference_layout",
+          "panel_type": "reference",
+          "title": "Page layout",
+          "content": "All diagnostic logic and flowcharts are on the left hand page, with supporting information on the right.",
+          "panel_provenance": {
+            "excerpt": "PAGE LAYOUT All diagnostic logic and flowcharts are on the left hand page, with supporting information, help, test, instructions and vehicle operation on the right.",
+            "chunk_id": "TM-9-2320-280-20-1_ch2_2-14_panel_reference_layout",
+            "metadata_source": "TM-9-2320-280-20-1/TM-9-2320-280-20-1_meta.json",
+            "parser_confidence": "high"
+          }
+        },
+        {
+          "panel_id": "panel_measurement_help",
+          "panel_type": "instruction",
+          "title": "Diagnostic procedure",
+          "content": "Use nearby notes, warnings, cautions, and help text to answer the current question safely.",
+          "panel_provenance": {
+            "excerpt": "Everything else on both pages is information to support the question. As a rule, the most important information (warnings, cautions, etc) is closest to the question.",
+            "chunk_id": "TM-9-2320-280-20-1_ch2_2-14_panel_measurement_help",
+            "metadata_source": "TM-9-2320-280-20-1/TM-9-2320-280-20-1_meta.json",
+            "parser_confidence": "medium"
+          }
+        }
+      ],
+      "render_views": {
+        "retrieval_view": "graph_nodes",
+        "technician_view": "guided_path",
+        "default_entry_node_id": "node_select_test",
+        "preferred_linearization": [
+          "node_select_test",
+          "node_answer_question",
+          "node_seek_support"
+        ]
+      }
+    },
+    "relations": [
+      {
+        "type": "support_panel_reference",
+        "label": "right-page support information",
+        "target": "panel_reference_layout"
+      }
+    ],
     "image_refs": [
       {
         "path": "TM-9-2320-280-20-1/images/124_image_0.png",
@@ -239,24 +423,51 @@
       }
     ],
     "taxonomy": {
-      "subsystems": [
-        "electrical",
-        "engine"
+      "controlled_core": {
+        "subsystems": [
+          "electrical",
+          "engine"
+        ],
+        "maintenance_categories": [
+          "troubleshooting",
+          "testing"
+        ],
+        "safety_types": []
+      },
+      "candidate_terms": [
+        {
+          "candidate_type": "component",
+          "original_term": "diagnostic flowcharts",
+          "normalized_term": "diagnostic flowchart",
+          "confidence_score": 0.88,
+          "canonical_label": "diagnostic flowchart"
+        },
+        {
+          "candidate_type": "alias",
+          "original_term": "right hand page",
+          "normalized_term": "support panel",
+          "confidence_score": 0.63,
+          "canonical_label": null
+        }
       ],
-      "symptoms": [],
-      "components": [
-        "diagnostic flowchart"
+      "quarantine_terms": [
+        {
+          "candidate_type": "ocr_noise",
+          "original_term": "Mutible choice",
+          "normalized_term": "multiple choice",
+          "confidence_score": 0.31,
+          "canonical_label": null,
+          "quarantine_reason": "ocr_noise"
+        }
       ],
-      "maintenance_categories": [
-        "troubleshooting",
-        "testing"
-      ],
-      "tools": [],
-      "materials": []
+      "extracted_requirements": {
+        "tools": [],
+        "materials": []
+      }
     },
     "provenance": {
       "excerpt": "PAGE LAYOUT All diagnostic logic and flowcharts are on the left hand page ... Just answer the questions on the left hand page. Follow the YES or NO path to the next step.",
-      "chunk_id": "TM-9-2320-280-20-1_ch2_2-14-page-layout",
+      "chunk_id": "TM-9-2320-280-20-1_ch2_2-14-page-layout-flow",
       "metadata_source": "TM-9-2320-280-20-1/TM-9-2320-280-20-1_meta.json",
       "parser_confidence": "medium"
     }
